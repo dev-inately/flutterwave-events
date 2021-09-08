@@ -1,33 +1,44 @@
 const { EventEmitter } = require('events');
 const util = require('util');
-const crypto = require('crypto');
 
-function PaystackEvents(key) {
-  if (!key) throw new Error('You must supply your `Paystack` API key!');
+const DEFAULT_HASH = process.env.FLUTTERWAVE_SECRET_HASH;
+const DEFAULT_OPTIONS = {
+  useEventKey: true,
+  defaultEventKey: 'FLW_EVENT'
+};
 
-  this._apikey = key;
+function FlutterwaveEvents(hash = DEFAULT_HASH, options = DEFAULT_OPTIONS) {
 
-  if (!(this instanceof PaystackEvents)) {
-    return new PaystackEvents(key);
+  this._hash = hash;
+  this._options = options;
+  this.init = () => {
+    this.init =
+    if (!_hash) throw new Error('You must supply your `Flutterwave` secret hash!');
+
+  }
+
+  if (!(this instanceof FlutterwaveEvents)) {
+    return new FlutterwaveEvents(key);
   }
 }
 
-PaystackEvents.prototype.webhook = function () {
+FlutterwaveEvents.prototype.webhook = function () {
   const self = this;
   return function (req, res, next) {
-    const paystackHeader = req.headers['x-paystack-signature'];
+    const flutterwaveHeader = req.headers['verif-hash'];
     // If the header is empty or request body is empty, then it is not a valid webhook
-    if (!paystackHeader || !Object.keys(req.body).length) {
+    if (!flutterwaveHeader || !Object.keys(req.body).length) {
       return res.sendStatus(400);
     }
-    const hash = crypto.createHmac('sha512', self._apikey).update(JSON.stringify(req.body)).digest('hex');
-    if (hash === paystackHeader) {
-      self.emit(req.body.event, req.body);
+    if (flutterwaveHeader === self._hash) {
+      const eventKey = self._options.useEventKey ? req.body.event : self._options.defaultEventKey;
+      self.emit(eventKey, req.body);
+      return res.sendStatus(200);
     }
-    return res.sendStatus(200);
+    return res.sendStatus(400);
   };
 };
 
-util.inherits(PaystackEvents, EventEmitter);
+util.inherits(FlutterwaveEvents, EventEmitter);
 
-module.exports = PaystackEvents;
+module.exports = FlutterwaveEvents;

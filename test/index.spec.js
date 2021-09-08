@@ -10,25 +10,25 @@ chai.should();
 
 const { expect } = chai;
 
-const PaystackEvents = require('..');
+const FlutterwaveEvents = require('..');
 
-const paystackEvents = new PaystackEvents(testData.MOCK_PAYSTACK_SECRET_KEY);
+const flutterwaveEvents = new FlutterwaveEvents(testData.MOCK_FLUTTER_SECRET_HASH);
 
 function bootStrapApp() {
   const app = express();
   app.use(express.json());
-  app.post('/webhook', paystackEvents.webhook());
+  app.post('/webhook', flutterwaveEvents.webhook());
   app.listen(7339);
   return app;
 }
 
-describe('Test Paystack Events Middleware', () => {
+describe('Test Flutterwave Events Middleware', () => {
   before(function () {
     this.app = chai.request(bootStrapApp()).keepOpen();
   });
 
-  it('should not instantiate PaystackEvents without API key', (done) => {
-    expect(PaystackEvents).to.throw('You must supply your `Paystack` API key!');
+  it('should not instantiate FlutterwaveEvents without Secret Hash', (done) => {
+    expect(FlutterwaveEvents).to.throw('You must supply your `Flutterwave` API key!');
     done();
   });
 
@@ -47,7 +47,7 @@ describe('Test Paystack Events Middleware', () => {
     this.app
       .post('/webhook')
       .set('Content-Type', 'application/json')
-      .set('x-paystack-signature', testData.mockPaystackService())
+      .set('x-flutterwave-signature', testData.mockFlutterwaveService())
       .send({})
       .end((err, res) => {
         expect(res.status).to.equal(400);
@@ -59,7 +59,7 @@ describe('Test Paystack Events Middleware', () => {
     this.app
       .post('/webhook')
       .set('Content-Type', 'application/json')
-      .set('x-paystack-signature', testData.mockPaystackService())
+      .set('x-flutterwave-signature', testData.mockFlutterwaveService())
       .send(testData.sampleWebhookResponse)
       .end((err, res) => {
         expect(res.status).to.equal(200);

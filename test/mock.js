@@ -1,60 +1,46 @@
-const crypto = require('crypto');
-const nock = require('nock');
-
-const PAYSTACK_SECRET_KEY = 'mock-apikey-for-th!s-test';
+const FLUTTERWAVE_SECRET_HASH = 'mock-apikey-for-th!s-test';
 
 const transferSuccessWebbhook = {
-  event: 'transfer.success',
-  data: {
-    amount: 30000,
-    currency: 'NGN',
-    domain: 'test',
-    failures: null,
-    id: 37272792,
-    integration: {
-      id: 463433,
-      is_live: true,
-      business_name: 'Boom Boom Industries NG',
+  "event": "charge.completed",
+  "data": {
+    "id": 285959875,
+    "tx_ref": "Links-616626414629",
+    "flw_ref": "PeterEkene/FLW270177170",
+    "device_fingerprint": "a42937f4a73ce8bb8b8df14e63a2df31",
+    "amount": 100,
+    "currency": "NGN",
+    "charged_amount": 100,
+    "app_fee": 1.4,
+    "merchant_fee": 0,
+    "processor_response": "Approved by Financial Institution",
+    "auth_model": "PIN",
+    "ip": "197.210.64.96",
+    "narration": "CARD Transaction ",
+    "status": "successful",
+    "payment_type": "card",
+    "created_at": "2020-07-06T19:17:04.000Z",
+    "account_id": 17321,
+    "customer": {
+      "id": 215604089,
+      "name": "Yemi Desola",
+      "phone_number": null,
+      "email": "user@gmail.com",
+      "created_at": "2020-07-06T19:17:04.000Z"
     },
-    reason: 'Have fun...',
-    reference: '1jhbs3ozmen0k7y5efmw',
-    source: 'balance',
-    source_details: null,
-    status: 'success',
-    titan_code: null,
-    transfer_code: 'TRF_wpl1dem4967avzm',
-    transferred_at: null,
-    recipient: {
-      active: true,
-      currency: 'NGN',
-      description: '',
-      domain: 'test',
-      email: null,
-      id: 8690817,
-      integration: 463433,
-      metadata: null,
-      name: 'Jack Sparrow',
-      recipient_code: 'RCP_a8wkxiychzdzfgs',
-      type: 'nuban',
-      is_deleted: false,
-      details: {
-        account_number: '0000000000',
-        account_name: null,
-        bank_code: '011',
-        bank_name: 'First Bank of Nigeria',
-      },
-      created_at: '2020-09-03T12:11:25.000Z',
-      updated_at: '2020-09-03T12:11:25.000Z',
-    },
-    session: { provider: null, id: null },
-    created_at: '2020-10-26T12:28:57.000Z',
-    updated_at: '2020-10-26T12:28:57.000Z',
-  },
-};
+    "card": {
+      "first_6digits": "123456",
+      "last_4digits": "7889",
+      "issuer": "VERVE FIRST CITY MONUMENT BANK PLC",
+      "country": "NG",
+      "type": "VERVE",
+      "expiry": "02/23"
+    }
+  }
+}
 
-exports.mockPaystackService = () => crypto.createHmac('sha512', PAYSTACK_SECRET_KEY)
+exports.mockFlutterwaveService = () => crypto.createHmac('sha512', PAYSTACK_SECRET_KEY)
   .update(JSON.stringify(transferSuccessWebbhook))
   .digest('hex');
 
-exports.MOCK_PAYSTACK_SECRET_KEY = PAYSTACK_SECRET_KEY;
+exports.FLUTTERWAVE_SECRET_HASH = FLUTTERWAVE_SECRET_HASH;
 exports.sampleWebhookResponse = transferSuccessWebbhook;

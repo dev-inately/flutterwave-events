@@ -1,8 +1,8 @@
-# Paystack Events
-![David](https://img.shields.io/david/dev-inately/paystack-events) ![npm bundle size](https://img.shields.io/bundlephobia/min/paystack-events) ![NPM](https://img.shields.io/npm/l/paystack-events)
->  Express Middleware that helps you to listen to webhook events from Paystack easily, without writing much codes
+# Flutterwave Events
+![David](https://img.shields.io/david/dev-inately/flutterwave-events) ![npm bundle size](https://img.shields.io/bundlephobia/min/flutterwave-events) ![NPM](https://img.shields.io/npm/l/flutterwave-events)
+>  Express Middleware that helps you to listen to webhook events from Flutterwave easily, without writing much codes
 
-This module helps you listen to [event](https://paystack.com/docs/payments/webhooks/#supported-events) from [Paystack webhook](https://paystack.com) securely while emitting it as a [NodeJS event](https://nodejs.org/api/events.html) which you can listen to easily at any point in your application. It decouples your request handler by emitting the webhook event and returning a response immediately to the caller, so a long-running action won't let the response (which Paystack uses to acknowledge your receipt) timeout.
+This module helps you listen to [event](https://flutterwave.com/docs/payments/webhooks/#supported-events) from [Flutterwave webhook](https://flutterwave.com) securely while emitting it as a [NodeJS event](https://nodejs.org/api/events.html) which you can listen to easily at any point in your application. It decouples your request handler by emitting the webhook event and returning a response immediately to the caller, so a long-running action won't let the response (which Flutterwave uses to acknowledge your receipt) timeout.
 
 So, Instead of modifying your service that handles the webhook event from your controller, you can just listen to any particular events, and your callback will take care of the rest.
 
@@ -11,7 +11,7 @@ So, Instead of modifying your service that handles the webhook event from your c
 Install via npm
 
 ```shell
-npm install paystack-events
+npm install flutterwave-events
 ```
 
 ## Example
@@ -20,16 +20,16 @@ This examples shows how you will use it typically in your express app. It doesn'
 ```js
 require('dotenv/config');
 const express = require('express');
-const PaystackEvents = require('paystack-events');
+const FlutterwaveEvents = require('flutterwave-events');
 
-const paystackEvents = new PaystackEvents(process.env.PAYSTACK_SECRET_KEY);
+const flutterwaveEvents = new FlutterwaveEvents(process.env.PAYSTACK_SECRET_KEY);
 
 const app = express();
 app.use(express.json());
 
-app.post('/webhook', log, paystackEvents.webhook());
+app.post('/webhook', log, flutterwaveEvents.webhook());
 
-paystackEvents.on('charge.success', (data) => {
+flutterwaveEvents.on('charge.success', (data) => {
   console.log(data);
 });
 // user.on('body', (x) => console.log(`Yay ${typeof x}`));
