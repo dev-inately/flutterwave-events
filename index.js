@@ -8,14 +8,10 @@ const DEFAULT_OPTIONS = {
 };
 
 function FlutterwaveEvents(hash = DEFAULT_HASH, options = DEFAULT_OPTIONS) {
+  if (!hash) throw new Error('You must supply your `Flutterwave` secret hash!');
 
   this._hash = hash;
   this._options = options;
-  this.init = () => {
-    this.init =
-    if (!_hash) throw new Error('You must supply your `Flutterwave` secret hash!');
-
-  }
 
   if (!(this instanceof FlutterwaveEvents)) {
     return new FlutterwaveEvents(key);
