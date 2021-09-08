@@ -4,7 +4,7 @@
   "description": "A tiny module to help you handle flutterwave api events automatically",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --timeout 500 --exit"
+    "test": ""
   },
   "repository": {
     "type": "git",
