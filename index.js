@@ -4,7 +4,8 @@ const util = require('util');
 const DEFAULT_HASH = process.env.FLUTTERWAVE_SECRET_HASH;
 const DEFAULT_OPTIONS = {
   useEventKey: true,
-  defaultEventKey: 'FLW_EVENT'
+  defaultEventKey: 'FLW_EVENT',
+  emitWildCardEvents: true,
 };
 
 function FlutterwaveEvents(hash = DEFAULT_HASH, options = DEFAULT_OPTIONS) {
@@ -29,6 +30,9 @@ FlutterwaveEvents.prototype.webhook = function () {
     if (flutterwaveHeader === self._hash) {
       const eventKey = self._options.useEventKey ? req.body.event : self._options.defaultEventKey;
       self.emit(eventKey, req.body);
+      if (self._options.emitWildCardEvents) {
+        self.emit('*', req.body);
+      }
       return res.sendStatus(200);
     }
     return res.sendStatus(400);
