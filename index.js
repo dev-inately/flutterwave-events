@@ -28,7 +28,10 @@ FlutterwaveEvents.prototype.webhook = function () {
       return res.sendStatus(400);
     }
     if (flutterwaveHeader === self._hash) {
-      const eventKey = self._options.useEventKey ? req.body.event : self._options.defaultEventKey;
+      let eventKey = self._options.defaultEventKey;
+      if (self._options.useEventKey) {
+        eventKey = req.body.event || self._options.defaultEventKey
+      }
       self.emit(eventKey, req.body);
       if (self._options.emitWildCardEvents) {
         self.emit('*', req.body);
